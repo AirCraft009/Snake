@@ -22,8 +22,9 @@ public class GamePanel extends JPanel implements Runnable{
      * they are upscaled because 16x16 pixels
      * on a 1080p screen is too small
      */
+    private final int SECONDTONANO = 1000000000;
     private final int UPSCALE = 3;
-
+    private Direction currentDir = Direction.Left;
     private final int REALTILESIZE = TILESIZE*UPSCALE; //40x40
     private final int MAXSCREENCOL = 16;
     private final int MAXSCREENROW = 12;
@@ -32,10 +33,14 @@ public class GamePanel extends JPanel implements Runnable{
     private final int speed = 4;
     private Thread gameThread;
     private int FPS = 60;
-    private final long drawDelay  = 1000000000/FPS;
-    private long nextFrame = System.nanoTime() + drawDelay;
+    private long drawDelay  = SECONDTONANO/FPS;
+    private long lastFrame = System.nanoTime();
+    private long currentTime;
+    private double deltaTime = 0;
     private int pX = 100;
     private int pY = 100;
+    private double timer;
+    public double fpsCount = 0;
     public KeyHandler keyH = new KeyHandler();
 
     public GamePanel(){
@@ -53,14 +58,29 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     public void update(){
-        if(keyH.rightP){
-            pX += 4;
-        } else if (keyH.leftP) {
-            pX -= 4;
-        } else if (keyH.upP) {
-            pY += 4;
-        } else if (keyH.downP) {
-            pY -= 4;
+        if(keyH.rightP && currentDir != Direction.Left){
+            currentDir = Direction.Right;
+        } else if (keyH.leftP && currentDir != Direction.Right) {
+            currentDir = Direction.Left;
+        } else if (keyH.upP && currentDir != Direction.Downward) {
+            currentDir = Direction.Upward;
+        } else if (keyH.downP && currentDir != Direction.Upward) {
+            currentDir = Direction.Downward;
+        }
+
+        switch (currentDir){
+            case Left:
+                pX -= 4;
+                break;
+            case Right:
+                pX += 4;
+                break;
+            case Upward:
+                pY -= 4;
+                break;
+            case Downward:
+                pY += 4;
+                break;
         }
     }
 
@@ -68,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(gr);
         Graphics2D g2 = (Graphics2D)gr;
         g2.setColor(Color.white);
-        g2.fillRoundRect(pX,pY, 30, 100, 10, 10);
+        g2.fillRect(pX,pY, REALTILESIZE, REALTILESIZE);
         g2.dispose();
     }
 
@@ -81,18 +101,22 @@ public class GamePanel extends JPanel implements Runnable{
          * 2. The drawing stage in this part of the loop everything thing that is updated is deleted and drawn again
          */
         while (gameThread != null){
-            nextFrame = System.nanoTime()+drawDelay;
-            update();
-            repaint();
-            long remainderTime = nextFrame -System.nanoTime();
-            if(remainderTime < 0){
-                remainderTime = 0;
+            currentTime = System.nanoTime();
+            deltaTime += (double) (currentTime - lastFrame) / drawDelay;
+            timer += (double) (currentTime - lastFrame);
+            lastFrame = currentTime;
+            if(deltaTime >= 1) {
+                update();
+                repaint();
+                deltaTime--;
+                fpsCount ++;
             }
-            try {
-                Thread.sleep(remainderTime/1000000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            if (timer >= SECONDTONANO){
+                System.out.println(fpsCount);
+                fpsCount = 0;
+                timer = 0;
             }
+
         }
     }
 

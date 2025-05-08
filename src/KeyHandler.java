@@ -13,7 +13,6 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         if (code == KeyEvent.VK_W) {
-            System.out.println("up");
             upP = true;
         } else if (code == KeyEvent.VK_S) {
             downP = true;

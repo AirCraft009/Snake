@@ -6,7 +6,9 @@ public class Main {
         GamePanel MainPanel = new GamePanel();
         WINDOW GameWindow = new WINDOW(MainPanel.getSCREENHEIGHT(), MainPanel.getSCREENWIDTH());
         GameWindow.add(MainPanel);
+        MainPanel.setFps(60);
         MainPanel.StartGame();
+        MainPanel.requestFocusInWindow();
 
     }
 }
