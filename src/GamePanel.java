@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
     private final int speed = 4;
     private Thread gameThread;
     private int FPS = 60;
-    private long drawDelay  = 1000000000/FPS;
+    private final long drawDelay  = 1000000000/FPS;
     private long nextFrame = System.nanoTime() + drawDelay;
     private int pX = 100;
     private int pY = 100;
