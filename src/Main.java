@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         GamePanel MainPanel = new GamePanel();
-        WINDOW GameWindow = new WINDOW(MainPanel.SCREENHEIGHT, MainPanel.SCREENWIDTH);
+        WINDOW GameWindow = new WINDOW(MainPanel.getSCREENHEIGHT(), MainPanel.getSCREENWIDTH());
         GameWindow.add(MainPanel);
         MainPanel.StartGame();
 
