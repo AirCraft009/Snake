@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    boolean rightP, leftP, upP, downP = false;
+    boolean rightP, leftP, upP, downP;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -12,42 +12,29 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        switch (code){
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
-                upP = true;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
-                downP = true;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
-                leftP = true;
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
-                rightP = true;
-            default:
-                break;
+        if (code == KeyEvent.VK_W) {
+            System.out.println("up");
+            upP = true;
+        } else if (code == KeyEvent.VK_S) {
+            downP = true;
+        } else if (code == KeyEvent.VK_A) {
+            leftP = true;
+        } else if (code == KeyEvent.VK_D) {
+            rightP = true;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        switch (code){
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
-                upP = true;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
-                downP = true;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
-                leftP = true;
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
-                rightP = true;
-            default:
-                break;
+        if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
+            upP = false;
+        } else if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+            downP = false;
+        } else if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
+            leftP = false;
+        } else if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
+            rightP = false;
         }
     }
 }
