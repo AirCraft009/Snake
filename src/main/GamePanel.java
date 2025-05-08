@@ -1,3 +1,4 @@
+package main;
 import javax.swing.*;
 import java.awt.*;
 
@@ -24,24 +25,30 @@ public class GamePanel extends JPanel implements Runnable{
      */
     private final int SECONDTONANO = 1000000000;
     private final int UPSCALE = 3;
-    private Direction currentDir = Direction.Left;
     private final int REALTILESIZE = TILESIZE*UPSCALE; //40x40
     private final int MAXSCREENCOL = 16;
     private final int MAXSCREENROW = 12;
     private final int SCREENWIDTH = REALTILESIZE * MAXSCREENCOL;
     private final int SCREENHEIGHT = REALTILESIZE * MAXSCREENROW;
-    private final int speed = 4;
-    private Thread gameThread;
+
+    //TIME SETTINGS
     private int FPS = 60;
     private long drawDelay  = SECONDTONANO/FPS;
     private long lastFrame = System.nanoTime();
     private long currentTime;
     private double deltaTime = 0;
+    public double fpsCount = 0;
+    private double timer;
+
+    //POSITIONAL SETTINGS
+    private final int speed = 4;
     private int pX = 100;
     private int pY = 100;
-    private double timer;
-    public double fpsCount = 0;
+    private Direction currentDir = Direction.Left;
     public KeyHandler keyH = new KeyHandler();
+
+    private Thread gameThread;
+
 
     public GamePanel(){
         setFocusable(true);
