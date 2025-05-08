@@ -1,3 +1,4 @@
+package main.java.main;
 public enum Difficulty {
     LOW(1),
     MID(2),

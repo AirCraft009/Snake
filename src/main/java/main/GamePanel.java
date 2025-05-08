@@ -1,4 +1,6 @@
-package main;
+package main.java.main;
+import main.java.entity.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -25,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
      */
     private final int SECONDTONANO = 1000000000;
     private final int UPSCALE = 3;
-    private final int REALTILESIZE = TILESIZE*UPSCALE; //40x40
+    public final int REALTILESIZE = TILESIZE*UPSCALE; //48x48
     private final int MAXSCREENCOL = 16;
     private final int MAXSCREENROW = 12;
     private final int SCREENWIDTH = REALTILESIZE * MAXSCREENCOL;
@@ -41,12 +43,11 @@ public class GamePanel extends JPanel implements Runnable{
     private double timer;
 
     //POSITIONAL SETTINGS
-    private final int speed = 4;
-    private int pX = 100;
-    private int pY = 100;
-    private Direction currentDir = Direction.Left;
-    public KeyHandler keyH = new KeyHandler();
+    public Direction currentDir = Direction.Left;
 
+
+    public KeyHandler keyH = new KeyHandler();
+    public PlayerHead player = new PlayerHead(this, keyH);
     private Thread gameThread;
 
 
@@ -55,6 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
+        player.setDefault();
         addKeyListener(keyH);
     }
 
@@ -65,37 +67,13 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     public void update(){
-        if(keyH.rightP && currentDir != Direction.Left){
-            currentDir = Direction.Right;
-        } else if (keyH.leftP && currentDir != Direction.Right) {
-            currentDir = Direction.Left;
-        } else if (keyH.upP && currentDir != Direction.Downward) {
-            currentDir = Direction.Upward;
-        } else if (keyH.downP && currentDir != Direction.Upward) {
-            currentDir = Direction.Downward;
-        }
-
-        switch (currentDir){
-            case Left:
-                pX -= 4;
-                break;
-            case Right:
-                pX += 4;
-                break;
-            case Upward:
-                pY -= 4;
-                break;
-            case Downward:
-                pY += 4;
-                break;
-        }
+        player.update();
     }
 
     public void paintComponent(Graphics gr){
         super.paintComponent(gr);
         Graphics2D g2 = (Graphics2D)gr;
-        g2.setColor(Color.white);
-        g2.fillRect(pX,pY, REALTILESIZE, REALTILESIZE);
+        player.blit(g2);
         g2.dispose();
     }
 
@@ -128,21 +106,6 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-    public int getpX() {
-        return pX;
-    }
-
-    public void setpX(int pX) {
-        this.pX = pX;
-    }
-
-    public int getpY() {
-        return pY;
-    }
-
-    public void setpY(int pY) {
-        this.pY = pY;
-    }
 
     public int getFps() {
         return FPS;
@@ -151,10 +114,6 @@ public class GamePanel extends JPanel implements Runnable{
     public void setFps(int fps) {
         this.FPS = fps;
         drawDelay = 1000000000/fps;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public int getREALTILESIZE() {

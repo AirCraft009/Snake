@@ -1,3 +1,4 @@
+package main.java.main;
 public class Main {
     GameStates CurrentState = GameStates.MENUE;
     Difficulty difficulty;
