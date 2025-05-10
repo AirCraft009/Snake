@@ -6,6 +6,5 @@ public enum Difficulty {
     MASOCHIST(4);
 
     Difficulty(int i) {
-
     }
 }

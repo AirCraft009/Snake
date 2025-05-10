@@ -3,6 +3,7 @@ import main.java.entity.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 
 /**
@@ -25,7 +26,8 @@ public class GamePanel extends JPanel implements Runnable{
      * they are upscaled because 16x16 pixels
      * on a 1080p screen is too small
      */
-    public int TICKSPEED = 3;
+    public int TICKSPEED = 1;
+    public int ChangeRate;
     private final int SECONDTONANO = 1000000000;
     private final int UPSCALE = 3;
     public final int REALTILESIZE = TILESIZE*UPSCALE; //48x48
@@ -47,20 +49,26 @@ public class GamePanel extends JPanel implements Runnable{
     //POSITIONAL SETTINGS
     public Direction currentDir = Direction.None;
     public int currTick = 0;
+    public int baseSpeed = 48;
+    public Mode players;
 
-
+    public Difficulty diff;
     public KeyHandler keyH = new KeyHandler();
-    public PlayerHead player = new PlayerHead(this, keyH);
-    public PlayerBody B1 = new PlayerBody(this);
+    public Snake s1;
+    public Snake s2;
     private Thread gameThread;
 
 
-    public GamePanel(){
+    public GamePanel(Difficulty d, Mode mode) throws IOException {
+        ChangeRate = FPS*baseSpeed/10;
+        diff = d;
+        //s1 = new Snake(this, keyH, 144, 144, 3);
+        if(mode == Mode.Double)
+            s2 = new Snake(this, keyH, 144, 200, 4);
         setFocusable(true);
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
-        player.setDefault();
         addKeyListener(keyH);
     }
 
@@ -71,14 +79,18 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     public void update(){
-        player.update(currTick);
+       // s1.update(currTick);
+        if(players == Mode.Double)
+            s2.update(currTick);
     }
 
     public void paintComponent(Graphics gr){
         super.paintComponent(gr);
         Graphics2D g2 = (Graphics2D)gr;
-        player.blit(g2);
-        B1.blit(g2);
+       // s1.blit(g2);
+        if(players == Mode.Double){
+            s2.blit(g2);
+        }
         g2.dispose();
     }
 
@@ -103,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable{
                 fpsCount ++;
             }
             if (timer >= SECONDTONANO){
-                System.out.println(fpsCount);
+                //System.out.println(fpsCount);
                 fpsCount = 0;
                 timer = 0;
             }

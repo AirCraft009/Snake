@@ -1,7 +1,7 @@
 package main.java.entity;
 
 import main.java.main.*;
-
+import main.java.entity.EntityType;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,16 +12,17 @@ public class PlayerHead extends Entity{
     KeyHandler keyH;
 
     public PlayerHead(GamePanel gp, KeyHandler KeyH){
+        type = EntityType.PlayerHead;
         this.gp = gp;
         this.keyH = KeyH;
         getPlayerImages();
 
     }
 
-    public void setDefault(){
-        x = 200;
-        y = 400;
-        speed  = 8;
+    public void setDefault(int x, int y){
+        this.x = x;
+        this.y = y;
+        speed  = gp.baseSpeed*1;
     }
 
     public void getPlayerImages(){
@@ -73,9 +74,8 @@ public class PlayerHead extends Entity{
         BufferedImage image = switch (gp.currentDir) {
             case Upward -> I1;
             case Downward -> I2;
-            case Right -> I3;
+            case Right, None -> I3;
             case Left -> I4;
-            case None -> I3;
         };
         g2.drawImage(image, x, y, gp.REALTILESIZE, gp.getREALTILESIZE(), null);
     }
