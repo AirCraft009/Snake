@@ -25,11 +25,12 @@ public class GamePanel extends JPanel implements Runnable{
      * they are upscaled because 16x16 pixels
      * on a 1080p screen is too small
      */
+    public int TICKSPEED = 3;
     private final int SECONDTONANO = 1000000000;
     private final int UPSCALE = 3;
     public final int REALTILESIZE = TILESIZE*UPSCALE; //48x48
-    private final int MAXSCREENCOL = 16;
-    private final int MAXSCREENROW = 12;
+    private final int MAXSCREENCOL = 17;
+    private final int MAXSCREENROW = 15;
     private final int SCREENWIDTH = REALTILESIZE * MAXSCREENCOL;
     private final int SCREENHEIGHT = REALTILESIZE * MAXSCREENROW;
 
@@ -42,12 +43,15 @@ public class GamePanel extends JPanel implements Runnable{
     public double fpsCount = 0;
     private double timer;
 
+
     //POSITIONAL SETTINGS
-    public Direction currentDir = Direction.Left;
+    public Direction currentDir = Direction.None;
+    public int currTick = 0;
 
 
     public KeyHandler keyH = new KeyHandler();
     public PlayerHead player = new PlayerHead(this, keyH);
+    public PlayerBody B1 = new PlayerBody(this);
     private Thread gameThread;
 
 
@@ -67,13 +71,14 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     public void update(){
-        player.update();
+        player.update(currTick);
     }
 
     public void paintComponent(Graphics gr){
         super.paintComponent(gr);
         Graphics2D g2 = (Graphics2D)gr;
         player.blit(g2);
+        B1.blit(g2);
         g2.dispose();
     }
 
@@ -93,6 +98,7 @@ public class GamePanel extends JPanel implements Runnable{
             if(deltaTime >= 1) {
                 update();
                 repaint();
+                currTick ++;
                 deltaTime--;
                 fpsCount ++;
             }
@@ -142,5 +148,13 @@ public class GamePanel extends JPanel implements Runnable{
 
     public int getSCREENHEIGHT() {
         return SCREENHEIGHT;
+    }
+
+    public int getTICKSPEED() {
+        return TICKSPEED;
+    }
+
+    public void setTICKSPEED(int TICKSPEED) {
+        this.TICKSPEED = TICKSPEED;
     }
 }
