@@ -12,11 +12,13 @@ public class Snake {
     GamePanel gp;
     KeyHandler KeyH;
     ArrayList <PlayerBody> body = new ArrayList<PlayerBody>();
-    private final PlayerHead head;
+    public final PlayerHead head;
+    public boolean first;
 
     public Snake(GamePanel gp, KeyHandler KeyH, int x, int y, int len) throws IOException {
         this.gp = gp;
         this.KeyH = KeyH;
+        this.first = first;
         head = new PlayerHead(this.gp, KeyH);
         head.setDefault(x, y);
         for (int i = 1; i < len; i++) {
@@ -26,19 +28,19 @@ public class Snake {
 
     }
 
-    public void update(int tick){
+    public void update(int tick) {
         int prevX = head.x;
         int prevY = head.y;
         int bodyX;
         int bodyY;
         head.update(tick);
-        if(gp.currentDir != Direction.None) {
+        if(head.currentDir != Direction.None) {
             for(int i = 0; i < body.size(); i++) {
                 PlayerBody p1 = body.get(i);
                 bodyX = p1.x;
                 bodyY = p1.y;
                 if(i == 0)
-                    p1.update(prevX, prevY, gp.currentDir);
+                    p1.update(prevX, prevY, head.currentDir);
                 else {
                     p1.update(prevX, prevY, body.get(i-1).internDir);
                 }
@@ -52,6 +54,14 @@ public class Snake {
         head.blit(g2);
         for (PlayerBody p1 : body) {
             p1.blit(g2);
+        }
+    }
+
+    public void freezeBlit(Graphics2D g2){
+        head.freezeblit(g2, body.getFirst().x, body.getFirst().y);
+        for (PlayerBody p1 : body) {
+            p1.rollback();
+            p1.frozenblit(g2);
         }
     }
 }

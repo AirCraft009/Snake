@@ -10,6 +10,8 @@ public class PlayerHead extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
+    public Direction currentDir = Direction.None;
+    public Direction prevDir = Direction.None;
 
     public PlayerHead(GamePanel gp, KeyHandler KeyH){
         type = EntityType.PlayerHead;
@@ -39,19 +41,20 @@ public class PlayerHead extends Entity{
     }
 
     public void update(int tick) {
+        prevDir = currentDir;
         if(tick%gp.TICKSPEED==0) {
-            if (keyH.rightP && gp.currentDir != Direction.Left) {
-                gp.currentDir = Direction.Right;
-            } else if (keyH.leftP && gp.currentDir != Direction.Right) {
-                gp.currentDir = Direction.Left;
-            } else if (keyH.upP && gp.currentDir != Direction.Downward) {
-                gp.currentDir = Direction.Upward;
-            } else if (keyH.downP && gp.currentDir != Direction.Upward) {
-                gp.currentDir = Direction.Downward;
+            if (keyH.rightP && currentDir != Direction.Left) {
+                currentDir = Direction.Right;
+            } else if (keyH.leftP && currentDir != Direction.Right) {
+                currentDir = Direction.Left;
+            } else if (keyH.upP && currentDir != Direction.Downward) {
+                currentDir = Direction.Upward;
+            } else if (keyH.downP && currentDir != Direction.Upward) {
+                currentDir = Direction.Downward;
             }
         }
 
-        switch (gp.currentDir) {
+        switch (currentDir) {
             case Left:
                 x -= speed;
                 break;
@@ -71,12 +74,19 @@ public class PlayerHead extends Entity{
 
     public void blit(Graphics g2){
         g2.setColor(Color.white);
-        BufferedImage image = switch (gp.currentDir) {
+        BufferedImage image = switch (currentDir) {
             case Upward -> I1;
             case Downward -> I2;
             case Right, None -> I3;
             case Left -> I4;
         };
         g2.drawImage(image, x, y, gp.REALTILESIZE, gp.getREALTILESIZE(), null);
+    }
+
+    public void freezeblit(Graphics2D g2,int px,int py){
+        x = px;
+        y = py;
+        currentDir = prevDir;
+        blit(g2);
     }
 }

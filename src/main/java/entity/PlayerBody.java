@@ -2,7 +2,6 @@ package main.java.entity;
 
 import main.java.main.Direction;
 import main.java.main.GamePanel;
-import main.java.main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,6 +16,9 @@ public class PlayerBody extends Entity{
     public Direction internDir = Direction.None;
     private Direction prevDir = Direction.None;
     private HashMap <String, BufferedImage> ImageMap = new HashMap<>();
+    private Direction rollBackDir1 = Direction.None;
+    private Direction rollBackDir2 = Direction.None;
+
     public PlayerBody(GamePanel gp, int newX, int newY, EntityType type) throws IOException {
         this.type = type;
         this.gp = gp;
@@ -26,8 +28,11 @@ public class PlayerBody extends Entity{
     }
 
     public void update(int nextX, int nextY, Direction newDir){
+        prevX = x;
+        prevY = y;
         x = nextX;
         y = nextY;
+        rollBackDir2 = prevDir;
         prevDir = newDir;
     }
 
@@ -46,26 +51,43 @@ public class PlayerBody extends Entity{
         ));
     }
 
+    public String getNextDirectionSprite(){
+        return switch (internDir) {
+            case Upward    -> prevDir == Direction.Right  ? "down-right" :
+                    prevDir == Direction.Left   ? "down-left"  :
+                            "vert";
+            case Downward  -> prevDir == Direction.Right  ? "up-right"   :
+                    prevDir == Direction.Left   ? "up-left"    :
+                            "vert";
+            case None, Right -> prevDir == Direction.Upward ? "up-left"   :
+                    prevDir == Direction.Downward ? "down-left":
+                            "hor";
+            case Left -> prevDir == Direction.Upward ? "up-right"  :
+                    prevDir == Direction.Downward ? "down-right":
+                            "hor";
+        };
+    }
+
     public void blit(Graphics g2){
         g2.setColor(Color.WHITE);
-        String key = switch (internDir) {
-            case Upward    -> prevDir == Direction.Right  ? "down-right" :
-                             prevDir == Direction.Left   ? "down-left"  :
-                                                                       "vert";
-            case Downward  -> prevDir == Direction.Right  ? "up-right"   :
-                             prevDir == Direction.Left   ? "up-left"    :
-                                                                       "vert";
-            case None, Right -> prevDir == Direction.Upward ? "up-left"   :
-                                prevDir == Direction.Downward ? "down-left":
-                                                                       "hor";
-            case Left -> prevDir == Direction.Upward ? "up-right"  :
-                          prevDir == Direction.Downward ? "down-right":
-                                                                       "hor";
-        };
-        BufferedImage image = ImageMap.get(key);
+        BufferedImage image = ImageMap.get(getNextDirectionSprite());
+        I1 = image;
         g2.drawImage(image, x,y, gp.REALTILESIZE, gp.REALTILESIZE, null);
+        rollBackDir1 = internDir;
         internDir = prevDir;
 
+    }
+
+    public void rollback(){
+        x = prevX;
+        y = prevY;
+    }
+
+    public void frozenblit(Graphics2D g2){
+        prevDir = rollBackDir2;
+        internDir = rollBackDir1;
+        I1 = ImageMap.get(getNextDirectionSprite());
+        g2.drawImage(I1, x, y, gp.REALTILESIZE, gp.REALTILESIZE, null);
     }
 
 

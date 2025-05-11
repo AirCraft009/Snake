@@ -1,9 +1,11 @@
 package main.java.main;
 import main.java.entity.*;
+import main.java.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 /**
@@ -31,8 +33,8 @@ public class GamePanel extends JPanel implements Runnable{
     private final int SECONDTONANO = 1000000000;
     private final int UPSCALE = 3;
     public final int REALTILESIZE = TILESIZE*UPSCALE; //48x48
-    private final int MAXSCREENCOL = 17;
-    private final int MAXSCREENROW = 15;
+    private final int MAXSCREENCOL = 18;
+    private final int MAXSCREENROW = 16;
     private final int SCREENWIDTH = REALTILESIZE * MAXSCREENCOL;
     private final int SCREENHEIGHT = REALTILESIZE * MAXSCREENROW;
 
@@ -47,24 +49,29 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     //POSITIONAL SETTINGS
-    public Direction currentDir = Direction.None;
     public int currTick = 0;
-    public int baseSpeed = 48;
-    public Mode players;
+    public int baseSpeed = REALTILESIZE;
+    public Mode players = Mode.Single;
 
     public Difficulty diff;
+    public GameStates state = GameStates.RUNNING;
     public KeyHandler keyH = new KeyHandler();
     public Snake s1;
     public Snake s2;
     private Thread gameThread;
+    private TileManager tileManager = new TileManager(this, "basic");
+    private ColissionManager cM;
 
 
     public GamePanel(Difficulty d, Mode mode) throws IOException {
         ChangeRate = FPS*baseSpeed/10;
         diff = d;
-        //s1 = new Snake(this, keyH, 144, 144, 3);
-        if(mode == Mode.Double)
+        s1 = new Snake(this, keyH, 144, 144, 10);
+        if(mode == Mode.Double) {
+            players = Mode.Double;
             s2 = new Snake(this, keyH, 144, 200, 4);
+        }
+        cM = new ColissionManager(this, tileManager);
         setFocusable(true);
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
@@ -77,17 +84,29 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
+    public void pauseGame(){
+        state = GameStates.PAUSED;
+    }
 
     public void update(){
-       // s1.update(currTick);
+        if(state == GameStates.PAUSED)
+            return;
+        s1.update(currTick);
         if(players == Mode.Double)
             s2.update(currTick);
+        cM.updateField();
     }
 
     public void paintComponent(Graphics gr){
         super.paintComponent(gr);
         Graphics2D g2 = (Graphics2D)gr;
-       // s1.blit(g2);
+        tileManager.blit(g2);
+        if(state == GameStates.PAUSED){
+            s1.freezeBlit(g2);
+            if(players == Mode.Double)
+                s2.freezeBlit(g2);
+        }
+        s1.blit(g2);
         if(players == Mode.Double){
             s2.blit(g2);
         }

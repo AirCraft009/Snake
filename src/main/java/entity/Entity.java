@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 public class Entity {
     public int x;
     public int y;
+    public int prevX;
+    public int prevY;
     public int row;
     public int col;
     public int speed;
