@@ -28,7 +28,7 @@ public class TileManager {
     public void readMapfile(String mapName){
         try{
             System.out.println(mapName);
-            InputStream is = getClass().getResourceAsStream("/map/basic.txt");
+            InputStream is = getClass().getResourceAsStream("/map/" + mapName + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             for (int i = 0; i < gp.getMAXSCREENROW(); i++) {
                 String line = reader.readLine();

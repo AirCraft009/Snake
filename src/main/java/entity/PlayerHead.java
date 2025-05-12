@@ -11,7 +11,6 @@ public class PlayerHead extends Entity{
     GamePanel gp;
     KeyHandler keyH;
     public Direction currentDir = Direction.None;
-    public Direction prevDir = Direction.None;
 
     public PlayerHead(GamePanel gp, KeyHandler KeyH){
         type = EntityType.PlayerHead;
@@ -24,7 +23,7 @@ public class PlayerHead extends Entity{
     public void setDefault(int x, int y){
         this.x = x;
         this.y = y;
-        speed  = gp.baseSpeed*1;
+        speed  = gp.baseSpeed;
     }
 
     public void getPlayerImages(){
@@ -41,7 +40,6 @@ public class PlayerHead extends Entity{
     }
 
     public void update(int tick) {
-        prevDir = currentDir;
         if(tick%gp.TICKSPEED==0) {
             if (keyH.rightP && currentDir != Direction.Left) {
                 currentDir = Direction.Right;
@@ -83,10 +81,9 @@ public class PlayerHead extends Entity{
         g2.drawImage(image, x, y, gp.REALTILESIZE, gp.getREALTILESIZE(), null);
     }
 
-    public void freezeblit(Graphics2D g2,int px,int py){
-        x = px;
-        y = py;
+    public void rollback(int pX, int pY, Direction prevDir){
+        x = pX;
+        y = pY;
         currentDir = prevDir;
-        blit(g2);
     }
 }

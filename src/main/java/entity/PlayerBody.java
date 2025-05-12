@@ -32,7 +32,6 @@ public class PlayerBody extends Entity{
         prevY = y;
         x = nextX;
         y = nextY;
-        rollBackDir2 = prevDir;
         prevDir = newDir;
     }
 
@@ -71,24 +70,17 @@ public class PlayerBody extends Entity{
     public void blit(Graphics g2){
         g2.setColor(Color.WHITE);
         BufferedImage image = ImageMap.get(getNextDirectionSprite());
-        I1 = image;
         g2.drawImage(image, x,y, gp.REALTILESIZE, gp.REALTILESIZE, null);
+        I1 = image;
         rollBackDir1 = internDir;
         internDir = prevDir;
 
     }
 
-    public void rollback(){
-        x = prevX;
-        y = prevY;
-    }
-
-    public void frozenblit(Graphics2D g2){
-        prevDir = rollBackDir2;
+    public void frezeeblit(Graphics2D g2){
+        prevDir = internDir;
         internDir = rollBackDir1;
-        I1 = ImageMap.get(getNextDirectionSprite());
-        g2.drawImage(I1, x, y, gp.REALTILESIZE, gp.REALTILESIZE, null);
+        BufferedImage image = ImageMap.get(getNextDirectionSprite());
+        g2.drawImage(image, x,y, gp.REALTILESIZE, gp.REALTILESIZE, null);
     }
-
-
 }

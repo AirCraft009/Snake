@@ -40,9 +40,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     //TIME SETTINGS
     private int FPS = 60;
-    private long drawDelay  = SECONDTONANO/FPS;
+    private long drawDelay;
     private long lastFrame = System.nanoTime();
     private long currentTime;
+    private double deltaSpeed;
     private double deltaTime = 0;
     public double fpsCount = 0;
     private double timer;
@@ -59,24 +60,22 @@ public class GamePanel extends JPanel implements Runnable{
     public Snake s1;
     public Snake s2;
     private Thread gameThread;
-    private TileManager tileManager = new TileManager(this, "basic");
-    private ColissionManager cM;
+    public TileManager tileManager = new TileManager(this, "basic");
 
 
     public GamePanel(Difficulty d, Mode mode) throws IOException {
-        ChangeRate = FPS*baseSpeed/10;
         diff = d;
-        s1 = new Snake(this, keyH, 144, 144, 10);
+        s1 = new Snake(this, keyH, 144, 144, 15);
         if(mode == Mode.Double) {
             players = Mode.Double;
             s2 = new Snake(this, keyH, 144, 200, 4);
         }
-        cM = new ColissionManager(this, tileManager);
         setFocusable(true);
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
         addKeyListener(keyH);
+        deltaSpeed = (double) baseSpeed/FPS;
     }
 
     public void StartGame(){
@@ -94,7 +93,6 @@ public class GamePanel extends JPanel implements Runnable{
         s1.update(currTick);
         if(players == Mode.Double)
             s2.update(currTick);
-        cM.updateField();
     }
 
     public void paintComponent(Graphics gr){
@@ -130,7 +128,7 @@ public class GamePanel extends JPanel implements Runnable{
                 update();
                 repaint();
                 currTick ++;
-                deltaTime--;
+                deltaTime = 0;
                 fpsCount ++;
             }
             if (timer >= SECONDTONANO){
@@ -150,7 +148,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setFps(int fps) {
         this.FPS = fps;
-        drawDelay = 1000000000/fps;
+        drawDelay = SECONDTONANO/FPS;
     }
 
     public int getREALTILESIZE() {

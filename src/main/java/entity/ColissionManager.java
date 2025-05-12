@@ -1,37 +1,41 @@
 package main.java.entity;
 
 import main.java.main.GamePanel;
-import main.java.main.Mode;
 import main.java.tile.TileManager;
 
 public class ColissionManager {
     GamePanel gp;
     TileManager tm;
     public int[][] field;
-    int snake1x;
-    int snake1y;
-    int snake2x;
-    int snake2y;
+    private Snake snake;
+    private int snakex;
+    private int snakey;
 
 
-    public ColissionManager(GamePanel gp, TileManager tm) {
+    public ColissionManager(GamePanel gp, TileManager tm, Snake snake) {
+        this.snake = snake;
         this.gp = gp;
         this.tm = tm;
         field = tm.BackgroundMap;
-        snake1x = gp.s1.head.x/gp.REALTILESIZE;
-        snake1y = gp.s1.head.y/gp.REALTILESIZE;
-        if(gp.players == Mode.Double){
-            snake2x = gp.s2.head.x/gp.REALTILESIZE;
-            snake2y = gp.s2.head.y/gp.REALTILESIZE;
-        }
+        snakex = this.snake.head.x/gp.REALTILESIZE;
+        snakey = this.snake.head.y/gp.REALTILESIZE;
     }
 
-    public void updateField(){
-        snake1x = gp.s1.head.x/gp.REALTILESIZE;
-        snake1y = gp.s1.head.y/gp.REALTILESIZE;
-        if(field[snake1y][snake1x] == 3){
-            System.out.println("collision with wall detected");
-            gp.pauseGame();
+    public boolean checkWallColission(){
+        snakex = snake.head.x/gp.REALTILESIZE;
+        snakey = snake.head.y/gp.REALTILESIZE;
+        return field[snakey][snakex] == 3;
+    }
+
+    public boolean checkOwnColission(){
+        snakex = snake.head.x/gp.REALTILESIZE;
+        snakey = snake.head.y/gp.REALTILESIZE;
+        for (PlayerBody p1 : snake.body){
+            if(p1.type == EntityType.PlayerTail)
+                return false;
+            if(p1.x/gp.REALTILESIZE == snakex && p1.y/gp.REALTILESIZE == snakey)
+                return true;
         }
+        return false;
     }
 }

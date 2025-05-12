@@ -12,6 +12,10 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        upP  = false;
+        downP = false;
+        leftP = false;
+        rightP = false;
         int code = e.getKeyCode();
         if (code == KeyEvent.VK_W) {
             upP = true;
