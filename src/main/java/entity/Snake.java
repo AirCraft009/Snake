@@ -2,7 +2,9 @@ package main.java.entity;
 
 import main.java.main.Direction;
 import main.java.main.GamePanel;
+import main.java.main.GameStates;
 import main.java.main.KeyHandler;
+import main.java.sounds.SoundManager;
 
 import java.awt.*;
 import java.io.IOException;
@@ -16,11 +18,12 @@ public class Snake {
     public boolean first;
     public ColissionManager cm;
     Direction prevSnakeheadDir = Direction.None;
+    SoundManager sM;
 
     public Snake(GamePanel gp, KeyHandler KeyH, int x, int y, int len) throws IOException {
+        sM = new SoundManager();
         this.gp = gp;
         this.KeyH = KeyH;
-        this.first = first;
         head = new PlayerHead(this.gp, KeyH);
         head.setDefault(x, y);
         for (int i = 1; i < len; i++) {
@@ -38,9 +41,12 @@ public class Snake {
         int bodyX;
         int bodyY;
         head.update(tick);
+        if(head.currentDir != prevSnakeheadDir)
+            sM.playMoveSound();
         if(cm.checkWallColission() ||  cm.checkOwnColission()) {
+            sM.playHitsound();
             head.rollback(prevX, prevY, prevSnakeheadDir);
-            gp.pauseGame();
+            gp.state = GameStates.DEATH;
             return;
         }
         if(head.currentDir != Direction.None) {
@@ -56,6 +62,29 @@ public class Snake {
                 prevX = bodyX;
                 prevY = bodyY;
             }
+        }
+    }
+
+    public void eatFruit(int extralen){
+        for (int i = 0; i < extralen; i++) {
+            try {
+                body.getLast().type = EntityType.PlayerBody;
+                int xOffset = 0;
+                int yOffset = 0;
+                switch (body.getLast().internDir){
+                    case Upward -> yOffset = gp.REALTILESIZE;
+                    case Downward -> yOffset = -gp.REALTILESIZE;
+                    case Right, None -> xOffset = gp.REALTILESIZE;
+                    case Left -> xOffset = -gp.REALTILESIZE;
+                }
+                body.addLast(new PlayerBody(gp, body.getLast().x+xOffset , body.getLast().y+yOffset, EntityType.PlayerTail));
+                body.getLast().internDir = body.get(body.size()-2).internDir;
+                body.getLast().prevDir = body.get(body.size()-2).internDir;
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+
         }
     }
 

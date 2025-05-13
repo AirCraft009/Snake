@@ -14,7 +14,7 @@ import java.util.Objects;
 public class PlayerBody extends Entity{
     GamePanel gp;
     public Direction internDir = Direction.None;
-    private Direction prevDir = Direction.None;
+    public Direction prevDir = Direction.None;
     private HashMap <String, BufferedImage> ImageMap = new HashMap<>();
     private Direction rollBackDir1 = Direction.None;
     private Direction rollBackDir2 = Direction.None;
@@ -40,14 +40,36 @@ public class PlayerBody extends Entity{
     }
 
     public void getImages() throws IOException {
-        ImageMap.putAll(Map.of(
-            "vert", getImage("snake-body"),
-            "hor", getImage("snake-body-side"),
-            "up-left", getImage("snake-body-up-left"),
-            "up-right", getImage("snake-body-up-right"),
-            "down-left", getImage("snake-body-down-left"),
-            "down-right", getImage("snake-body-down-right")
-        ));
+        if(type == EntityType.PlayerBody) {
+            ImageMap.putAll(Map.of(
+                    "vert", getImage("snake-body"),
+                    "hor", getImage("snake-body-side"),
+                    "up-left", getImage("snake-body-up-left"),
+                    "up-right", getImage("snake-body-up-right"),
+                    "down-left", getImage("snake-body-down-left"),
+                    "down-right", getImage("snake-body-down-right")
+            ));
+        } else if (type == EntityType.PlayerTail) {
+            ImageMap.putAll(Map.of(
+                    "up", getImage("snake-tail-up"),
+                    "down", getImage("snake-tail-down"),
+                    "right", getImage("snake-tail-right"),
+                    "left", getImage("snake-tail-left"),
+                    "up-left", getImage("snake-tail-up-left"),
+                    "up-right", getImage("snake-tail-up-right"),
+                    "down-left", getImage("snake-tail-down-left"),
+                    "down-right", getImage("snake-tail-down-right")
+            ));
+        }
+    }
+
+    public String getNextSprite(){
+        if(type == EntityType.PlayerBody){
+            return getNextDirectionSprite();
+        } else if (type == EntityType.PlayerTail) {
+            return getNextDirectionSpriteTail();
+        }
+        return " ";
     }
 
     public String getNextDirectionSprite(){
@@ -67,9 +89,26 @@ public class PlayerBody extends Entity{
         };
     }
 
+    public String getNextDirectionSpriteTail(){
+        return switch (internDir) {
+            case Upward    -> prevDir == Direction.Right  ? "down-right" :
+                    prevDir == Direction.Left   ? "down-left"  :
+                            "up";
+            case Downward  -> prevDir == Direction.Right  ? "up-right"   :
+                    prevDir == Direction.Left   ? "up-left"    :
+                            "down";
+            case None, Right -> prevDir == Direction.Upward ? "up-left"   :
+                    prevDir == Direction.Downward ? "down-left":
+                            "right";
+            case Left -> prevDir == Direction.Upward ? "up-right"  :
+                    prevDir == Direction.Downward ? "down-right":
+                            "left";
+        };
+    }
+
     public void blit(Graphics g2){
         g2.setColor(Color.WHITE);
-        BufferedImage image = ImageMap.get(getNextDirectionSprite());
+        BufferedImage image = ImageMap.get(getNextSprite());
         g2.drawImage(image, x,y, gp.REALTILESIZE, gp.REALTILESIZE, null);
         I1 = image;
         rollBackDir1 = internDir;

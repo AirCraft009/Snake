@@ -55,8 +55,8 @@ public class GamePanel extends JPanel implements Runnable{
     public Mode players = Mode.Single;
 
     public Difficulty diff;
-    public GameStates state = GameStates.RUNNING;
-    public KeyHandler keyH = new KeyHandler();
+    public GameStates state = GameStates.MENUE;
+    public KeyHandler keyH = new KeyHandler(this);
     public Snake s1;
     public Snake s2;
     private Thread gameThread;
@@ -65,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public GamePanel(Difficulty d, Mode mode) throws IOException {
         diff = d;
-        s1 = new Snake(this, keyH, 144, 144, 15);
+        s1 = new Snake(this, keyH, 144, 144, 3);
         if(mode == Mode.Double) {
             players = Mode.Double;
             s2 = new Snake(this, keyH, 144, 200, 4);
@@ -88,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update(){
-        if(state == GameStates.PAUSED)
+        if(state != GameStates.RUNNING)
             return;
         s1.update(currTick);
         if(players == Mode.Double)
@@ -98,8 +98,12 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics gr){
         super.paintComponent(gr);
         Graphics2D g2 = (Graphics2D)gr;
+        if(state == GameStates.MENUE) {
+            drawMenu(g2);
+            return;
+        }
         tileManager.blit(g2);
-        if(state == GameStates.PAUSED){
+        if(state != GameStates.RUNNING){
             s1.freezeBlit(g2);
             if(players == Mode.Double)
                 s2.freezeBlit(g2);
@@ -138,6 +142,15 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
         }
+    }
+
+
+    private void drawMenu(Graphics2D g2) {
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 32));
+        g2.drawString("Snake Game", 100, 100);
+        g2.setFont(new Font("Arial", Font.PLAIN, 24));
+        g2.drawString("Press ENTER to Start", 100, 150);
     }
 
 

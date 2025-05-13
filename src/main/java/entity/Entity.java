@@ -7,8 +7,6 @@ public class Entity {
     public int y;
     public int prevX;
     public int prevY;
-    public int row;
-    public int col;
     public int speed;
     public EntityType type;
     public BufferedImage I1, I2, I3, I4,I5,I6;

@@ -4,6 +4,11 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     public boolean rightP, leftP, upP, downP;
+    GamePanel gp;
+
+    public KeyHandler(GamePanel gp){
+        this.gp = gp;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -39,6 +44,8 @@ public class KeyHandler implements KeyListener {
             leftP = false;
         } else if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
             rightP = false;
+        } else if (code == KeyEvent.VK_ENTER&&gp.state == GameStates.MENUE) {
+            gp.state = GameStates.RUNNING;
         }
     }
 }
