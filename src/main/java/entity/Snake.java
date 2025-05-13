@@ -31,6 +31,7 @@ public class Snake {
         }
         body.add(new PlayerBody(gp, x-48*len, y, EntityType.PlayerTail));
         cm = new ColissionManager(gp, gp.tileManager, this);
+        sM.playSoundLoop("/audio/music/bassie.wav");
 
     }
 

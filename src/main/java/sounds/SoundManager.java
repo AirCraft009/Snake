@@ -23,6 +23,19 @@ public class SoundManager{
         playSound(moveSound.soundPath);
     }
 
+    public void playSoundLoop(String filePath){
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    Objects.requireNonNull(SoundManager.class.getResource(filePath)));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.loop(100);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void playSound(String filePath) {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(

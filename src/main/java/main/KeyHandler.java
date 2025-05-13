@@ -44,8 +44,10 @@ public class KeyHandler implements KeyListener {
             leftP = false;
         } else if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
             rightP = false;
-        } else if (code == KeyEvent.VK_ENTER&&gp.state == GameStates.MENUE) {
+        } else if (code == KeyEvent.VK_ENTER&&gp.state != GameStates.RUNNING) {
             gp.state = GameStates.RUNNING;
+        } else if (code == KeyEvent.VK_ESCAPE && gp.state == GameStates.RUNNING) {
+            gp.state = GameStates.MENUE;
         }
     }
 }
