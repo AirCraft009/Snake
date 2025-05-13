@@ -9,7 +9,7 @@ public class Main {
     Difficulty difficulty;
 
     public static void main(String[] args) throws IOException {
-        GamePanel MainPanel = new GamePanel(Difficulty.MID, Mode.Double);
+        GamePanel MainPanel = new GamePanel(Difficulty.MID, Mode.Single);
         WINDOW GameWindow = new WINDOW(MainPanel.getSCREENHEIGHT(), MainPanel.getSCREENWIDTH());
         GameWindow.add(MainPanel);
         MainPanel.setFps(8);
