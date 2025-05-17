@@ -9,10 +9,12 @@ public class SoundManager{
 
     private Sound hitSound;
     private Sound moveSound;
+    private Sound eatSound;
 
     public SoundManager(){
         hitSound = new Sound("/audio/sounds/hit.wav");
         moveSound =  new Sound("/audio/sounds/move.wav");
+        eatSound = new Sound("/audio/sounds/eat.wav");
     }
 
     public void playHitsound(){
@@ -34,6 +36,10 @@ public class SoundManager{
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
+    }
+
+    public void playEatSound(){
+        playSound(eatSound.soundPath);
     }
 
     public static void playSound(String filePath) {

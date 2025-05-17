@@ -19,11 +19,13 @@ public class Snake {
     public ColissionManager cm;
     Direction prevSnakeheadDir = Direction.None;
     SoundManager sM;
+    FoodPlacer fP;
 
-    public Snake(GamePanel gp, KeyHandler KeyH, int x, int y, int len) throws IOException {
+    public Snake(GamePanel gp, KeyHandler KeyH, int x, int y, int len, FoodPlacer fp) throws IOException {
         sM = new SoundManager();
         this.gp = gp;
         this.KeyH = KeyH;
+        this.fP  = fp;
         head = new PlayerHead(this.gp, KeyH);
         head.setDefault(x, y);
         for (int i = 1; i < len; i++) {
@@ -49,6 +51,10 @@ public class Snake {
             head.rollback(prevX, prevY, prevSnakeheadDir);
             gp.state = GameStates.DEATH;
             return;
+        }
+        if(fP.chekEaten(head.x, head.y)){
+            eatFruit(1);
+            sM.playEatSound();
         }
         if(head.currentDir != Direction.None) {
             for(int i = 0; i < body.size(); i++) {
@@ -81,6 +87,7 @@ public class Snake {
                 body.addLast(new PlayerBody(gp, body.getLast().x+xOffset , body.getLast().y+yOffset, EntityType.PlayerTail));
                 body.getLast().internDir = body.get(body.size()-2).internDir;
                 body.getLast().prevDir = body.get(body.size()-2).internDir;
+                body.get(body.size()-2).getImages();
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -90,6 +97,7 @@ public class Snake {
     }
 
     public void blit(Graphics2D g2){
+        fP.blit(g2);
         head.blit(g2);
         for (PlayerBody p1 : body) {
             p1.blit(g2);

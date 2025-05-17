@@ -4,6 +4,5 @@ public enum EntityType {
     PlayerBody,
     PlayerTail,
     Food,
-    Wall,
     Projectile
 }

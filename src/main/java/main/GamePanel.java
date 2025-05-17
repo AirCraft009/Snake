@@ -61,15 +61,19 @@ public class GamePanel extends JPanel implements Runnable{
     public Snake s2;
     private Thread gameThread;
     public TileManager tileManager = new TileManager(this, "basic");
+    private FoodPlacer foodPlacer;
 
 
     public GamePanel(Difficulty d, Mode mode) throws IOException {
         diff = d;
-        s1 = new Snake(this, keyH, 144, 144, 3);
+        foodPlacer = new FoodPlacer(this, 1, tileManager);
+
         if(mode == Mode.Double) {
             players = Mode.Double;
-            s2 = new Snake(this, keyH, 144, 200, 4);
+            foodPlacer = new FoodPlacer(this, 2, tileManager);
+            s2 = new Snake(this, keyH, 144, 200, 3, foodPlacer);
         }
+        s1 = new Snake(this, keyH, 144, 144, 3, foodPlacer);
         setFocusable(true);
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
