@@ -1,41 +1,261 @@
-Date: 18;05;25;57;38
+Date: 19;05;25;49;10
 mapName: basic
 Mode: Single
 Difficulty: MID
 Superfruits_enabled: false
 Snake-Save0
-fruitseaten0: 3
+fruitseaten0: 0
 Head: 
-headpos: 4, 14
-headDir: Downward
+headpos: 10, 7
+headDir: Left
 Body: 
 B0
-pos: 4, 13
+pos: 11, 7
 Dir: Downward
-prevDir: Downward
+prevDir: Left
 type: PlayerBody
 B1
-pos: 4, 12
-Dir: Left
+pos: 11, 6
+Dir: Downward
 prevDir: Downward
 type: PlayerBody
 B2
-pos: 5, 12
-Dir: Left
-prevDir: Left
-type: PlayerBody
-B3
-pos: 6, 12
-Dir: Left
-prevDir: Left
-type: PlayerBody
-B4
-pos: 7, 12
-Dir: Downward
-prevDir: Left
-type: PlayerBody
-B5
-pos: 7, 11
+pos: 11, 5
 Dir: Downward
 prevDir: Downward
+type: PlayerBody
+B3
+pos: 11, 4
+Dir: Downward
+prevDir: Downward
+type: PlayerBody
+B4
+pos: 11, 3
+Dir: Downward
+prevDir: Downward
+type: PlayerBody
+B5
+pos: 11, 2
+Dir: Left
+prevDir: Downward
+type: PlayerBody
+B6
+pos: 12, 2
+Dir: Left
+prevDir: Left
+type: PlayerBody
+B7
+pos: 13, 2
+Dir: Upward
+prevDir: Left
+type: PlayerBody
+B8
+pos: 13, 3
+Dir: Upward
+prevDir: Upward
+type: PlayerBody
+B9
+pos: 13, 4
+Dir: Upward
+prevDir: Upward
+type: PlayerBody
+B10
+pos: 13, 5
+Dir: Upward
+prevDir: Upward
+type: PlayerBody
+B11
+pos: 13, 6
+Dir: Upward
+prevDir: Upward
+type: PlayerBody
+B12
+pos: 13, 7
+Dir: Upward
+prevDir: Upward
+type: PlayerBody
+B13
+pos: 13, 8
+Dir: Upward
+prevDir: Upward
+type: PlayerBody
+B14
+pos: 13, 9
+Dir: Right
+prevDir: Upward
+type: PlayerBody
+B15
+pos: 12, 9
+Dir: Right
+prevDir: Right
+type: PlayerBody
+B16
+pos: 11, 9
+Dir: Right
+prevDir: Right
+type: PlayerBody
+B17
+pos: 10, 9
+Dir: Downward
+prevDir: Right
+type: PlayerBody
+B18
+pos: 10, 8
+Dir: Right
+prevDir: Downward
+type: PlayerBody
+B19
+pos: 9, 8
+Dir: Downward
+prevDir: Right
+type: PlayerBody
+B20
+pos: 9, 7
+Dir: Right
+prevDir: Downward
+type: PlayerBody
+B21
+pos: 8, 7
+Dir: Downward
+prevDir: Right
+type: PlayerBody
+B22
+pos: 8, 6
+Dir: Right
+prevDir: Downward
+type: PlayerBody
+B23
+pos: 7, 6
+Dir: Downward
+prevDir: Right
+type: PlayerBody
+B24
+pos: 7, 5
+Dir: Right
+prevDir: Downward
+type: PlayerBody
+B25
+pos: 6, 5
+Dir: Downward
+prevDir: Right
+type: PlayerBody
+B26
+pos: 6, 4
+Dir: Right
+prevDir: Downward
+type: PlayerBody
+B27
+pos: 5, 4
+Dir: Right
+prevDir: Right
+type: PlayerBody
+B28
+pos: 4, 4
+Dir: Right
+prevDir: Right
+type: PlayerBody
+B29
+pos: 3, 4
+Dir: None
+prevDir: Right
+type: PlayerBody
+B30
+pos: 2, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B31
+pos: 1, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B32
+pos: 0, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B33
+pos: -1, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B34
+pos: -2, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B35
+pos: -3, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B36
+pos: -4, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B37
+pos: -5, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B38
+pos: -6, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B39
+pos: -7, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B40
+pos: -8, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B41
+pos: -9, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B42
+pos: -10, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B43
+pos: -11, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B44
+pos: -12, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B45
+pos: -13, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B46
+pos: -14, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B47
+pos: -15, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B48
+pos: -16, 4
+Dir: None
+prevDir: None
+type: PlayerBody
+B49
+pos: -17, 4
+Dir: None
+prevDir: None
 type: PlayerTail

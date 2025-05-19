@@ -4,6 +4,7 @@ import main.java.main.GamePanel;
 import main.java.tile.TileManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class FoodPlacer {
@@ -16,16 +17,19 @@ public class FoodPlacer {
         this.gp = gp;
         this.tm = tm;
         foods = new Food[foodLen];
-        for (int i = 0; i < foodLen; i++) {
+    }
+
+    public void init(Snake snake){
+        for (int i = 0; i < foods.length; i++) {
             foods[i] = new Food(0, 0, gp);
-            getEaten(i);
+            getEaten(i, snake);
         }
     }
 
-    public boolean chekEaten(int x, int y){
+    public boolean chekEaten(int x, int y, Snake snake){
         for (int i = 0; i < foods.length; i++) {
             if(foods[i].x == x && foods[i].y == y){
-                getEaten(i);
+                getEaten(i, snake);
                 return true;
             }
         }
@@ -33,14 +37,16 @@ public class FoodPlacer {
     }
 
     public void newRandomCords(int pos){
-        foods[pos].x = rand.nextInt(1, gp.getMAXSCREENCOL()-1)*48;
-        foods[pos].y = rand.nextInt(1, gp.getMAXSCREENROW()-1)*48;
+        Food food = foods[pos];
+        food.x = rand.nextInt(1, gp.getMAXSCREENCOL()-1)*48;
+        food.y = rand.nextInt(1, gp.getMAXSCREENROW()-1)*48;
     }
 
-    public void getEaten(int pos){
+    public void getEaten(int pos, Snake snake){
+        Food food = foods[pos];
         do {
             newRandomCords(pos);
-        }while (tm.BackgroundMap[foods[pos].y/gp.REALTILESIZE][foods[pos].x/gp.REALTILESIZE] == 3);
+        }while (tm.BackgroundMap[food.y/gp.REALTILESIZE][food.x/gp.REALTILESIZE] == 3 || snake.snakeAtThatpoint(food.x, food.y));
     }
 
     public void blit(Graphics2D g2){

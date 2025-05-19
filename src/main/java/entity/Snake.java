@@ -33,6 +33,7 @@ public class Snake {
             body.add(new PlayerBody(gp, x-48*i, y, EntityType.PlayerBody));
         }
         body.add(new PlayerBody(gp, x-48*len, y, EntityType.PlayerTail));
+        fp.init(this);
         cm = new ColissionManager(gp, gp.tileManager, this);
         sM.playSoundLoop("/audio/music/bassie.wav");
 
@@ -55,7 +56,7 @@ public class Snake {
             gp.state = GameStates.DEATH;
             return;
         }
-        if(fP.chekEaten(head.x, head.y)){
+        if(fP.chekEaten(head.x, head.y, this)){
             eatFruit(1);
             sM.playEatSound();
         }

@@ -9,10 +9,10 @@ public class Main {
     Difficulty difficulty;
 
     public static void main(String[] args) throws IOException {
-        GamePanel MainPanel = new GamePanel(Difficulty.MID, Mode.Single);
+        GamePanel MainPanel = new GamePanel();
         WINDOW GameWindow = new WINDOW(MainPanel.getSCREENHEIGHT(), MainPanel.getSCREENWIDTH());
         GameWindow.add(MainPanel);
-        MainPanel.setFps(5);
+        MainPanel.setFps(8);
         MainPanel.StartGame();
         MainPanel.requestFocusInWindow();
 

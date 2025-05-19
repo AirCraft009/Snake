@@ -61,33 +61,36 @@ public class GamePanel extends JPanel implements Runnable{
     public GameStates state = GameStates.MENUE;
     public KeyHandler keyH = new KeyHandler(this);
     private Thread gameThread;
-    public TileManager tileManager = new TileManager(this, "basic");
+    public TileManager tileManager;
     private FoodPlacer foodPlacer;
     private boolean saved = false;
     private Snake[] snakes;
+    private boolean superFruits;
 
 
-    public GamePanel(Difficulty d, Mode mode) throws IOException {
-        diff = d;
-        snakes = new Snake[(mode == Mode.Single)? 1: 2];
-        foodPlacer = new FoodPlacer(this, (mode == Mode.Single)? 1 : 2, tileManager);
-        for (int i = 0; i < snakes.length; i++) {
-            snakes[i] = new Snake(this, keyH, 144, 192+i*48, 3, foodPlacer);
-        }
+    public GamePanel() throws IOException {
         setFocusable(true);
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
         addKeyListener(keyH);
         deltaSpeed = (double) baseSpeed/FPS;
+        StartNewGame("basic", Difficulty.MID, true, Mode.Single);
     }
 
-    public void StartNewGame(String mapName, Difficulty diff, boolean superfruits, Mode mode){
-        
+    public void StartNewGame(String mapName, Difficulty diff, boolean superfruits, Mode mode) throws IOException {
+        this.diff = diff;
+        superFruits = superfruits;
+        players = mode;
+        tileManager = new TileManager(this, mapName);
+        snakes = new Snake[(mode == Mode.Single)? 1: 2];
+        foodPlacer = new FoodPlacer(this, (mode == Mode.Single)? 1 : 2, tileManager);
+        for (int i = 0; i < snakes.length; i++) {
+            snakes[i] = new Snake(this, keyH, 144, 192+i*48, 50, foodPlacer);
+        }
     }
 
     public void setToPrevSave(int saveNum){
-
     }
 
     public void StartGame(){
@@ -101,7 +104,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void update(){
         if (state == GameStates.DEATH){
-            saveCurrentProgress();
+            saveCurrentProgress(1);
             return;
         }
         if(state == GameStates.RUNNING) {
@@ -127,13 +130,13 @@ public class GamePanel extends JPanel implements Runnable{
         return builder.toString();
     }
 
-    public void saveCurrentProgress(){
+    public void saveCurrentProgress(int saveNum){
         if(saved){
             return;
         }
         saved = true;
         String userHome = System.getProperty("user.dir");
-        String finalPath = userHome + "/src/main/resources/saves/save1.txt";
+        String finalPath = userHome + "/src/main/resources/saves/save" + saveNum +".txt";
         System.out.println(finalPath);
         try {
             File myObj = new File(finalPath);
