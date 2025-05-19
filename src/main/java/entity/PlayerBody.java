@@ -117,9 +117,16 @@ public class PlayerBody extends Entity{
     }
 
     public void frezeeblit(Graphics2D g2){
-        prevDir = internDir;
         internDir = rollBackDir1;
-        BufferedImage image = ImageMap.get(getNextDirectionSprite());
+        BufferedImage image = ImageMap.get(getNextSprite());
         g2.drawImage(image, x,y, gp.REALTILESIZE, gp.REALTILESIZE, null);
+    }
+
+    public String toString(){
+        StringBuilder builder = new StringBuilder("pos: ").append(x/48).append(", ").append(y/48).append("\n");
+        builder.append("Dir: ").append(internDir);
+        builder.append("\nprevDir: ").append(prevDir);
+        builder.append("\ntype: ").append(type);
+        return builder.toString();
     }
 }

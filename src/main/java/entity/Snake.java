@@ -20,6 +20,7 @@ public class Snake {
     Direction prevSnakeheadDir = Direction.None;
     SoundManager sM;
     FoodPlacer fP;
+    public int fruitsEaten = 0;
 
     public Snake(GamePanel gp, KeyHandler KeyH, int x, int y, int len, FoodPlacer fp) throws IOException {
         sM = new SoundManager();
@@ -38,6 +39,8 @@ public class Snake {
     }
 
     public void update(int tick) {
+        if(gp.state == GameStates.DEATH)
+            return;
         int prevX = head.x;
         int prevY = head.y;
         prevSnakeheadDir = head.currentDir;
@@ -72,7 +75,27 @@ public class Snake {
         }
     }
 
+    public boolean snakeHeadAtPoint(int x, int y){
+        return head.x == x && head.y == y;
+    }
+
+    public boolean snakeBodyAtPoint(int x, int y){
+        for (PlayerBody body1 : body){
+            if(body1.type == EntityType.PlayerTail)
+                return false;
+            if(body1.x == x && body1.y == y){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean snakeAtThatpoint(int x, int y){
+        return snakeHeadAtPoint(x, y) || snakeBodyAtPoint(x, y);
+    }
+
     public void eatFruit(int extralen){
+        fruitsEaten ++;
         for (int i = 0; i < extralen; i++) {
             try {
                 body.getLast().type = EntityType.PlayerBody;
@@ -109,5 +132,15 @@ public class Snake {
         for (PlayerBody p1 : body) {
             p1.frezeeblit(g2);
         }
+    }
+
+    public String toString(){
+        StringBuilder builder = new StringBuilder(head.toString());
+        builder.append("\nBody: ");
+        for (int i = 0; i < body.size(); i++){
+            builder.append("\nB").append(i);
+            builder.append("\n").append(body.get(i).toString());
+        }
+        return builder.toString();
     }
 }

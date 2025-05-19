@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class SoundManager{
-
+    //cleaned up all the files, made them more modular, and optimized the code as much as possible
     private Sound hitSound;
     private Sound moveSound;
     private Sound eatSound;

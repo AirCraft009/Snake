@@ -1,0 +1,41 @@
+Date: 18;05;25;57;38
+mapName: basic
+Mode: Single
+Difficulty: MID
+Superfruits_enabled: false
+Snake-Save0
+fruitseaten0: 3
+Head: 
+headpos: 4, 14
+headDir: Downward
+Body: 
+B0
+pos: 4, 13
+Dir: Downward
+prevDir: Downward
+type: PlayerBody
+B1
+pos: 4, 12
+Dir: Left
+prevDir: Downward
+type: PlayerBody
+B2
+pos: 5, 12
+Dir: Left
+prevDir: Left
+type: PlayerBody
+B3
+pos: 6, 12
+Dir: Left
+prevDir: Left
+type: PlayerBody
+B4
+pos: 7, 12
+Dir: Downward
+prevDir: Left
+type: PlayerBody
+B5
+pos: 7, 11
+Dir: Downward
+prevDir: Downward
+type: PlayerTail

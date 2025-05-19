@@ -1,5 +1,4 @@
 save structure:
-
 Date: DD:MM:YYYY:mm:ss
 MapName: name
 Mode: single/double
@@ -7,28 +6,23 @@ Difficulty: MID
 Superfruits_enabled: true
 curlength: len
 fruitseaten: anz
-
 Snake-Save1:
 Head:
 headPos: col, row
 headDir: dir
-
 Body:
 B0:
 pos: col row
 Dir: dir
 prevDir: dir
 type: EntityType.PlayerBody
-
 B1:
 pos: col, row
 Dir: dir
 preDir: dir
 type: EntityType.PlayerTail
-
 Snake-Save2:
 if Double
 then same as snake1
 else:
-
 null

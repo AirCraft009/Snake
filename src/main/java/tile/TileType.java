@@ -4,7 +4,8 @@ public enum TileType {
     Ground1("Ground-basic.png"),
     Ground2("Ground-basic-var2.png"),
     Ground3("Ground-basic-var2.png"),
-    Wall1("wall.png");
+    Wall1("wall.png"),
+    SpawnPoint("Ground-basic.png");
 
     private final String fileName;
 

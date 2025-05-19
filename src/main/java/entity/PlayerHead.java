@@ -70,6 +70,12 @@ public class PlayerHead extends Entity{
         }
     }
 
+    public void restoreAfterSave(int x, int y, Direction currDir){
+        this.x = x;
+        this.y = y;
+        this.currentDir = currDir;
+    }
+
     public void blit(Graphics g2){
         g2.setColor(Color.white);
         BufferedImage image = switch (currentDir) {
@@ -85,5 +91,12 @@ public class PlayerHead extends Entity{
         x = pX;
         y = pY;
         currentDir = prevDir;
+    }
+
+    public String toString(){
+        StringBuilder builder = new StringBuilder("Head: \n");
+        builder.append("headpos: ").append(x/48).append(", ").append(y/48);
+        builder.append("\nheadDir: ").append(currentDir);
+        return builder.toString();
     }
 }

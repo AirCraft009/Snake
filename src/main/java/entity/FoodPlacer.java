@@ -17,7 +17,8 @@ public class FoodPlacer {
         this.tm = tm;
         foods = new Food[foodLen];
         for (int i = 0; i < foodLen; i++) {
-            foods[i] = new Food(48*(i+2), 144+48*i, gp);
+            foods[i] = new Food(0, 0, gp);
+            getEaten(i);
         }
     }
 
@@ -31,10 +32,14 @@ public class FoodPlacer {
         return false;
     }
 
+    public void newRandomCords(int pos){
+        foods[pos].x = rand.nextInt(1, gp.getMAXSCREENCOL()-1)*48;
+        foods[pos].y = rand.nextInt(1, gp.getMAXSCREENROW()-1)*48;
+    }
+
     public void getEaten(int pos){
         do {
-            foods[pos].x = rand.nextInt(1, gp.getMAXSCREENCOL()-1)*48;
-            foods[pos].y = rand.nextInt(1, gp.getMAXSCREENROW()-1)*48;
+            newRandomCords(pos);
         }while (tm.BackgroundMap[foods[pos].y/gp.REALTILESIZE][foods[pos].x/gp.REALTILESIZE] == 3);
     }
 

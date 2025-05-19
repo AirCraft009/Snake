@@ -12,7 +12,7 @@ public class Main {
         GamePanel MainPanel = new GamePanel(Difficulty.MID, Mode.Single);
         WINDOW GameWindow = new WINDOW(MainPanel.getSCREENHEIGHT(), MainPanel.getSCREENWIDTH());
         GameWindow.add(MainPanel);
-        MainPanel.setFps(10);
+        MainPanel.setFps(5);
         MainPanel.StartGame();
         MainPanel.requestFocusInWindow();
 

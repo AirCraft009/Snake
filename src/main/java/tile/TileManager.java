@@ -17,16 +17,19 @@ public class TileManager {
     GamePanel gp;
     BackgroundTile[] tiles;
     public int[][] BackgroundMap;
+    public String mapName;
 
     public TileManager(GamePanel gp, String name){
         this.gp = gp;
         tiles = new BackgroundTile[gp.getMAXSCREENROW()*gp.getMAXSCREENCOL()];
         BackgroundMap = new int[gp.getMAXSCREENROW()][gp.getMAXSCREENCOL()];
+        mapName = name;
         getImages(name);
     }
 
     public void readMapfile(String mapName){
         try{
+            this.mapName = mapName;
             System.out.println(mapName);
             InputStream is = getClass().getResourceAsStream("/map/" + mapName + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));

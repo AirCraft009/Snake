@@ -4,8 +4,11 @@ import main.java.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -57,29 +60,34 @@ public class GamePanel extends JPanel implements Runnable{
     public Difficulty diff;
     public GameStates state = GameStates.MENUE;
     public KeyHandler keyH = new KeyHandler(this);
-    public Snake s1;
-    public Snake s2;
     private Thread gameThread;
     public TileManager tileManager = new TileManager(this, "basic");
     private FoodPlacer foodPlacer;
+    private boolean saved = false;
+    private Snake[] snakes;
 
 
     public GamePanel(Difficulty d, Mode mode) throws IOException {
         diff = d;
-        foodPlacer = new FoodPlacer(this, 1, tileManager);
-
-        if(mode == Mode.Double) {
-            players = Mode.Double;
-            foodPlacer = new FoodPlacer(this, 2, tileManager);
-            s2 = new Snake(this, keyH, 144, 200, 3, foodPlacer);
+        snakes = new Snake[(mode == Mode.Single)? 1: 2];
+        foodPlacer = new FoodPlacer(this, (mode == Mode.Single)? 1 : 2, tileManager);
+        for (int i = 0; i < snakes.length; i++) {
+            snakes[i] = new Snake(this, keyH, 144, 192+i*48, 3, foodPlacer);
         }
-        s1 = new Snake(this, keyH, 144, 144, 3, foodPlacer);
         setFocusable(true);
         setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
         addKeyListener(keyH);
         deltaSpeed = (double) baseSpeed/FPS;
+    }
+
+    public void StartNewGame(String mapName, Difficulty diff, boolean superfruits, Mode mode){
+        
+    }
+
+    public void setToPrevSave(int saveNum){
+
     }
 
     public void StartGame(){
@@ -92,11 +100,56 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update(){
-        if(state != GameStates.RUNNING)
+        if (state == GameStates.DEATH){
+            saveCurrentProgress();
             return;
-        s1.update(currTick);
-        if(players == Mode.Double)
-            s2.update(currTick);
+        }
+        if(state == GameStates.RUNNING) {
+            for (Snake snake : snakes) {
+                snake.update(currTick);
+            }
+        }
+    }
+
+    public String toString(){
+        LocalDateTime d = LocalDateTime.now();;
+        StringBuilder builder = new StringBuilder("Date: ").append(d.format(DateTimeFormatter.ofPattern("dd;MM;yy;mm;ss")));
+        builder.append("\nmapName: ").append(tileManager.mapName);
+        builder.append("\nMode: ").append(players);
+        builder.append("\nDifficulty: ").append(diff);
+        builder.append("\nSuperfruits_enabled: ").append(false);
+        for (int i = 0; i < snakes.length; i++) {
+            Snake s1 = snakes[i];
+            builder.append("\nSnake-Save").append(i);
+            builder.append("\nfruitseaten").append(i).append(": ").append(s1.fruitsEaten).append("\n");
+            builder.append(s1.toString());
+        }
+        return builder.toString();
+    }
+
+    public void saveCurrentProgress(){
+        if(saved){
+            return;
+        }
+        saved = true;
+        String userHome = System.getProperty("user.dir");
+        String finalPath = userHome + "/src/main/resources/saves/save1.txt";
+        System.out.println(finalPath);
+        try {
+            File myObj = new File(finalPath);
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists." + myObj.getName());
+            }
+            FileWriter myWriter = new FileWriter(finalPath);
+            myWriter.write(toString());
+            myWriter.close();
+            System.out.println("Successfully wrote save to file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public void paintComponent(Graphics gr){
@@ -104,19 +157,23 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D)gr;
         if(state == GameStates.MENUE) {
             drawMenu(g2);
+            g2.dispose();
             return;
         }
         tileManager.blit(g2);
-        if(state != GameStates.RUNNING){
-            s1.freezeBlit(g2);
-            if(players == Mode.Double)
-                s2.freezeBlit(g2);
+        if(state == GameStates.DEATH){
+            for (Snake snake : snakes){
+                snake.freezeBlit(g2);
+            }
+            g2.dispose();
+            return;
         }
-        s1.blit(g2);
-        if(players == Mode.Double){
-            s2.blit(g2);
+        if(state == GameStates.RUNNING) {
+            for (Snake snake : snakes) {
+                snake.blit(g2);
+            }
+            g2.dispose();
         }
-        g2.dispose();
     }
 
     @Override
